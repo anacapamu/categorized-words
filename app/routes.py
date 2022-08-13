@@ -49,7 +49,7 @@ def post_one_word_to_category(category_id):
 @category_bp.route("/<category_id>/words", methods=("GET",))
 def get_words_of_category(category_id):
     category = validate_model(Category, category_id)
-    words_dict = [word.to_dict() for word in category.words]
+    words_dict = [word.word for word in category.words]
 
     result = category.to_dict()
     result["words"] = words_dict

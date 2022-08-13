@@ -19,10 +19,7 @@ def post_one_category():
     db.session.add(new_category)
     db.session.commit()
 
-    categories = {}
-    categories["category"] = new_category.to_dict()
-
-    return jsonify(categories), 201
+    return jsonify(new_category.to_dict()), 201
 
 @category_bp.route("", methods=("GET",))
 def get_categories():
@@ -40,17 +37,14 @@ def post_one_word_to_category(category_id):
     validate_model(Category, category_id)
 
     try:
-        new_word = Word(word=request_body["word"])
+        new_word = Word(word=request_body["word"], category_id=category_id)
     except KeyError as err:
         error_message(f"missing required {err}", 400)
 
     db.session.add(new_word)
     db.session.commit()
 
-    result = {}
-    result["words"] = new_word.to_dict()
-
-    return jsonify(result), 201
+    return jsonify(new_word.to_dict()), 201
 
 @category_bp.route("/<category_id>/words", methods=("GET",))
 def get_words_of_category(category_id):
@@ -70,6 +64,15 @@ def delete_one_category(category_id):
     db.session.commit()
 
     return make_response(jsonify(dict(details=f'Category #{category.category_id} "{category.category}" successfully deleted'))), 200
+
+@word_bp.route("", methods=("GET",))
+def get_words():
+
+    words = Word.query.all()
+
+    result = [word.to_dict() for word in words]
+
+    return jsonify(result), 200
 
 @word_bp.route("/<word_id>", methods=("DELETE",))
 def delete_one_word(word_id):

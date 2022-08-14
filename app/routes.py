@@ -82,19 +82,3 @@ def delete_one_word(word_id):
     db.session.commit()
 
     return make_response(jsonify(dict(details=f'Word #{word.word_id} "{word.word}" successfully deleted'))), 200
-
-@word_bp.route('/<word_id>', methods=('PATCH',))
-def patch_category_id_of_word(word_id):
-    word = validate_model(Word, word_id)
-
-    request_body = request.get_json()
-
-    try:
-        new_category = Word(category_id=request_body["category_id"])
-    except KeyError as err:
-        error_message(f"missing required {err}", 400)
-
-    word.category_id = new_category
-    db.session.commit()
-
-    return make_response(jsonify(dict(details=f'Category id updated to {word.category_id}'))), 200

@@ -16,6 +16,3 @@ Categorized Words is an API that returns words of a category.
 `[/categories/<category_id>]` deletes specified category<br/>
 `[/words/<word_id>]` deletes specified word<br/>
 
-### PATCH
-`[/words/<word_id>]` change category_id of word<br/>
-
